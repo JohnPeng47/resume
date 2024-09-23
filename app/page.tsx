@@ -1,101 +1,79 @@
-import Image from "next/image";
+import { Inter } from 'next/font/google'
 
-export default function Home() {
+const inter = Inter({ subsets: ['latin'] })
+
+export default function Resume() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className={`min-h-screen bg-[#121212] text-white p-8 ${inter.className}`}>
+      <div className="max-w-3xl mx-auto">
+        <header className="mb-12">
+          <h1 className="text-4xl font-bold mb-2">John Peng</h1>
+          <p className="text-gray-400">johnpeng47@gmail.com | (647) 206-3110 | Toronto, Canada</p>
+        </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <section className="mb-8">
+          <h2 className="text-2xl font-semibold mb-4">Professional Experience</h2>
+          <div className="mb-6">
+            <h3 className="text-xl font-medium">Penetration Tester, Kroll (Formerly Security Compass)</h3>
+            <p className="text-gray-400 mb-2">July 2018 - Jan 2023</p>
+            <ul className="list-disc list-inside text-gray-300">
+              <li>Led and participated in pentests against a variety of standard targets including web-app, cloud, mobile and network</li>
+              <li>Executed bespoke engagement types, including binary fuzzing against the heap allocator of a graphics occlusion library and red team engagements</li>
+              <li>Inculcated a mindset of true paranoia when it comes to designing secure web applications</li>
+            </ul>
+          </div>
+        </section>
+
+        <section className="mb-8">
+          <h2 className="text-2xl font-semibold mb-4">Projects</h2>
+          <p className="mb-4 text-gray-300">(What Ive been up to since I quit my job)</p>
+          <div className="mb-6">
+            <h3 className="text-xl font-medium">Cowboy (Automated Unit Test Generator)</h3>
+            <p className="text-gray-400 mb-2">
+              <a href="https://github.com/JohnPeng47/cowboy-server/tree/for_lauren">Server Code</a>
+              <a>, </a>
+              <a href="https://github.com/JohnPeng47/cowboy.git">Client Code</a>
+            </p>
+            <ul className="list-disc list-inside text-gray-300">
+              <li>Basically implemented <a className="font-medium font-bold text-white" href="https://news.ycombinator.com/item?id=39405996"><b>this</b></a> for Python, and extensible to other
+                lanuages with TreeSitter support
+              </li>
+              <li>Uses special home-brewed, coverage diffing algorithm to build test/src file mapping</li>
+              <li>Then do rounds of unit test "augmentation" (extending existing unit tests instead of generating new tests wholesale) using 
+                the src file mapping as additional context to the LLM to guide generation
+              </li>
+              <li>Empirically tested that adding src context improves coverage of augmented tests by significant margin</li>
+              <li>Allows for automated, large-scale unit test augmentation, with human interaction only for approving test cases</li>
+            </ul>
+          </div>
+          <div className="mb-6">
+            <h3 className="text-xl font-medium">Topic Explorer <span className="text-sm text-gray-400 italic">source code available upon request</span></h3>
+            <p className="text-gray-400 mb-2"><a href="https://cowboy.rocks/TopicExplorer?query=character%20and%20themes%20of%20doystevsky%27s%20the%20idiot">https://cowboy.rocks/TopicExplorer</a></p>
+            <ul className="list-disc list-inside text-gray-300">
+              <li>Recursively expand into deeper subtopic levels using a single prompt representing a 
+                <a className="font-medium font-bold text-white" href="https://x.com/theRealJohnPeng/status/1831776651031801921"><b> hierarchal tree</b></a> of topics</li>
+              <li>First part of an experimental, AI-first document writing flow</li>
+              <li>TBR: Generating paragraphs/sections from the list of topics piecemeal</li>
+              <li>TBR: Taking the generated paragraphs from above and composing them into a full-fledged document</li>
+            </ul>
+          </div>
+          <div className="mb-6">
+            <h3 className="text-xl font-medium">CodeSearch <span className="text-sm text-gray-400 italic">source code available upon request</span></h3>
+            <p className="text-gray-400 mb-2"><a href="https://cowboy.rocks/codesearch">https://cowboy.rocks/codesearch</a></p>
+            <ul className="list-disc list-inside text-gray-300">
+              <li>Generates summaries for code clusters created from graph-based clustering algo on a dependency graph over RAG-style code chunking</li>
+              <li>TBR: Naive semantic search over chunked code embeddings </li>
+              <li>TBR: Incorporating summary chunk into semantic code search</li>
+            </ul>
+          </div>
+        </section>
+        
+        <section className="mb-8">
+          <h2 className="text-2xl font-semibold mb-4">Education</h2>
+          <h3 className="text-xl font-medium">Software Engineering, McMaster University</h3>
+          <p className="text-gray-400">2018</p>
+        </section>
+      </div>
     </div>
   );
 }
