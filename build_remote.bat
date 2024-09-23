@@ -1,0 +1,1 @@
+npm run build && scp -i "C:\Users\jpeng\.ssh\KongServer.pem" -r out/* ubuntu@ec2-18-223-150-134.us-east-2.compute.amazonaws.com:/home/ubuntu/resume/out

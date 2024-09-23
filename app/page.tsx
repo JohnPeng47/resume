@@ -39,7 +39,7 @@ export default function Resume() {
                 lanuages with TreeSitter support
               </li>
               <li>Uses special home-brewed, coverage diffing algorithm to build test/src file mapping</li>
-              <li>Then do rounds of unit test "augmentation" (extending existing unit tests instead of generating new tests wholesale) using 
+              <li>Then do rounds of unit test &quot;augmentation&quot; (extending existing unit tests instead of generating new tests wholesale) using 
                 the src file mapping as additional context to the LLM to guide generation
               </li>
               <li>Empirically tested that adding src context improves coverage of augmented tests by significant margin</li>
