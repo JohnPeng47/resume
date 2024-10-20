@@ -1,12 +1,12 @@
 {
   "name": "resume",
   "version": "0.1.0",
-  "homepage": "/resume",
   "private": true,
+  "homepage": "/resume",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next build && npx serve@latest out",
     "lint": "next lint"
   },
   "dependencies": {

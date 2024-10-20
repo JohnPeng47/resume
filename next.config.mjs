@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  assetPrefix: '/resume',
-  basePath: '/resume',
+  // assetPrefix: '/resume',
+  // basePath: '/resume',
   output: 'export',
 };
 
