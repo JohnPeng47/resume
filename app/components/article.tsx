@@ -1,3 +1,5 @@
+import React from "react";  
+
 interface CodeBlockProps {
     children: string;
     className?: string;
@@ -42,7 +44,29 @@ export function CodeBlock({ children, className = "" }: CodeBlockProps) {
 export function Section({ children, className = "" }: ComponentProps) {
     return (
         <section className={`content-section mb-8 ${className}`}>
-            {children}
+            {React.Children.map(children, child => {
+                if (React.isValidElement(child) && child.type === "h2") {
+                    const id = child.props.children.toString().toLowerCase().replace(/\s+/g, "-");
+                    return (
+                        <div className="group">
+                            <div className="flex items-center">
+                                <a href={`#${id}`} className="no-underline">
+                                    {React.cloneElement(child, {
+                                        id: id,
+                                        className: `${child.props.className || ""} hover:cursor-pointer m-0`
+                                    })}
+                                </a>
+                                <div className="flex-1">
+                                    <span className="opacity-0 group-hover:opacity-100 ml-2 text-gray-400">
+                                        #
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
+                return child;
+            })}
         </section>
     );
 }

@@ -6,5 +6,5 @@ export const CowboyPost: BlogHeader = {
     title: "Cowboy",
     date: "2024-12-25",
     excerpt: "I don't like writing tests. Nobody likes writing tests? ...",
-    subheading: "Never again, unit test. Never again"
+    subheading: "Mankind's first step towards full unit test automation"
 }

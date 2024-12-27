@@ -1,7 +1,7 @@
 "use client"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { blogPosts } from "@/lib/posts"
+import { blogPosts } from "@/app/blog/all-posts"
 
 export default function Home() {
   const recentPosts = blogPosts.slice(0, 3)

@@ -8,7 +8,7 @@ import {
     OrderedList, 
     ListItem 
 } from "@/app/components/article"
-import { blogPosts } from "@/lib/posts"
+import { blogPosts } from "@/app/blog/all-posts"
 
 export default function Cowboy() {
   const post = blogPosts.find(post => post.slug === "cowboy")!
@@ -24,28 +24,28 @@ export default function Cowboy() {
 
       <Section>
         <Paragraph>
-          I don&apos;t like writing tests. Nobody likes writing tests? With LLMs, I thought there was a way to automate a large part of testing out of software development. Which is to say, Cowboy in its current form does not go 100% in the way of liberating us from the drudgery of test writing.
+          I don&apos;t like writing tests. 
+          Nobody likes writing tests? With LLMs, I thought there was a way to automate a large part of testing out of software development. 
+          So today I am releasing <a href="https://github.com/JohnPeng47/cowboy">Cowboy</a>, an open-source project that aims at doing just that, mankind&apos;s first step towards full unit test automation.
         </Paragraph>
-
-        <Paragraph>
-          It can currently only extend existing unit test suites, a limitation that exists because:
-        </Paragraph>
-        <OrderedList>
-          <ListItem>Getting the setup code for tests to work can be quite tricky</ListItem>
-          <ListItem>Without example code, the LLM is liable to generate code that is ostensibly correct but completely out of wack with the style/standards used in the rest of the tests</ListItem>
-        </OrderedList>
-      </Section>
-
-      <Section>
-        <h2 className="text-2xl font-bold mt-8 mb-4">How it works</h2>
         <Paragraph>The main loop in Cowboy goes something like this:</Paragraph>
         <OrderedList>
-          <ListItem>Iterate through all TestModules (a collection of tests, this is either a whole file or a class with unit tests implemented as its methods) in your current repo</ListItem>
+          <ListItem>Iterate through all existing TestModules (a collection of tests, this is either a whole file or a class with unit tests implemented as its methods) in your current repo</ListItem>
           <ListItem>Pass its context into a LLM test-generating prompt</ListItem>
           <ListItem>Generate a set of tests</ListItem>
           <ListItem>Run coverage on the set of tests to ensure that they improve coverage</ListItem>
         </OrderedList>
+        <Paragraph>
+          Currently we are limited to only extending existing TestModules because:
+        </Paragraph>
+        <UnorderedList>
+          <ListItem>Getting the setup code for tests to work can be quite tricky</ListItem>
+          <ListItem>Without example code, the LLM is liable to generate code that is ostensibly correct but completely out of wack with the style/standards used in the rest of the tests</ListItem>
+        </UnorderedList>
 
+        <Paragraph>
+          The current prompt that Cowboy uses is quite simple, and only uses two pieces context:
+        </Paragraph>
         <CodeBlock>
           {`Given this piece of source code:
 {source_code}
@@ -57,10 +57,9 @@ Come up with some new tests that improves coverage`}
         </CodeBlock>
 
         <Paragraph>
-          Of the two pieces of contexts above, getting the source_file that is uniquely covered by a particular test case actually proved to be quite tricky
+          Of the two pieces of contexts above, getting the existing_tests is easy but getting the source_file that is uniquely covered by a particular test case actually proved to be quite tricky
         </Paragraph>
       </Section>
-
       <Section>
         <h2 className="text-2xl font-bold mt-8 mb-4">Setup Coverage Collection</h2>
         <Paragraph>
@@ -77,14 +76,14 @@ Come up with some new tests that improves coverage`}
         </Paragraph>
 
         <CodeBlock>
-          {`base_cov -&gt; [1,2,3,4,5] -------: f1.py
-mod_cov -&gt; [3,4,5] ------------: f1.py
-base_cov - mod_cov -&gt; [1,2] ---: f1.py
+          {`base_cov -> [1,2,3,4,5] -------: f1.py
+mod_cov -> [3,4,5] ------------: f1.py
+base_cov - mod_cov -> [1,2] ---: f1.py
 base_cov - (base_cov - mod_cov) = mod_cov   # aha mod_cov covers line [1,2] of f1.py`}
         </CodeBlock>
 
         <Paragraph>
-          (note: the value of mod_cov cannot be recovered directly, since we can only deselect tests, so we only know base_cov and (base_cov - mod_cov) beforehand).
+          (Note: the value of mod_cov cannot be recovered directly, since we can only deselect tests, so we only know base_cov and (base_cov - mod_cov) beforehand).
         </Paragraph>
 
         <Paragraph>
@@ -108,6 +107,13 @@ for i in len(tests):
           So now, instead of the potential coverage overlap being between all the tests inside TestModule and all the test in the whole repo, we now only have to consider overlap between a single test in TestModule and all the other tests in TestModule.
         </Paragraph>
       </Section>
+
+      <Section>
+        <h2 className="text-2xl font-bold mt-8 mb-4">Check it out</h2>
+        <Paragraph>
+        https://github.com/JohnPeng47/cowboy
+        </Paragraph>
+      </Section>  
     </Article>
   )
 }

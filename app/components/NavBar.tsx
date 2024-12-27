@@ -7,7 +7,7 @@ export default function NavBar() {
         <div className="flex justify-between h-16 items-center">
           <div className="flex-shrink-0">
             <Link href="/" className="text-black text-xl font-semibold">
-              Thoughts Untethered
+              Unquantified Fabrications
             </Link>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
