@@ -1,0 +1,176 @@
+# Directory Tree:
+├── .aider.tags.cache.v3
+│   ├── cache.db
+│   ├── cache.db-shm
+│   └── cache.db-wal
+├── .git
+├── .next
+├── app
+│   ├── blog
+│   │   ├── [slug]
+│   │   │   ├── hello-world.tsx
+│   │   │   └── page.tsx
+│   │   └── page.tsx
+│   ├── components
+│   │   └── NavBar.tsx
+│   ├── fonts
+│   │   ├── GeistMonoVF.woff
+│   │   └── GeistVF.woff
+│   ├── resume
+│   │   └── page.tsx
+│   ├── favicon.ico
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── lib
+│   ├── posts.ts
+│   └── utils.ts
+├── node_modules
+├── out
+├── .eslintrc.json
+├── .gitignore
+├── build_remote.bat
+├── components.json
+├── next-env.d.ts
+├── next.config.mjs
+├── output.txt
+├── package-lock.json
+├── package.json
+├── postcss.config.mjs
+├── README.md
+├── resume.txt
+├── tailwind.config.ts
+└── tsconfig.json
+
+# Concatenated Files:
+
+# File: app\blog\[slug]\hello-world.tsx
+
+
+app\blog\[slug]\hello-world.tsx:
+│export default function Hello() {
+⋮...
+
+
+# File: app\blog\[slug]\page.tsx
+
+
+app\blog\[slug]\page.tsx:
+⋮...
+│export function generateStaticParams() {
+│  return blogPosts.map((post) => ({
+│    slug: post.slug,
+│  }))
+⋮...
+│export default function BlogPost({ params }: { params: { slug: string } }) {
+│  const post = getBlogPost(params.slug)
+│
+│  if (!post) {
+│    notFound()
+│  }
+│
+│  return (
+│    <div className="min-h-screen bg-white">
+│      <article className="max-w-4xl mx-auto p-8">
+⋮...
+
+
+# File: app\blog\page.tsx
+
+
+app\blog\page.tsx:
+⋮...
+│export default function BlogList() {
+│  return (
+│    <div className="min-h-screen bg-white">
+│      <div className="max-w-4xl mx-auto p-8">
+│        <h1 className="text-4xl font-bold text-black mb-8">Blog Posts</h1>
+│        <div className="space-y-8">
+│          {blogPosts.map((post) => (
+│            <article key={post.slug} className="border-b border-gray-200 pb-8">
+│              <Link 
+│                href={`/blog/${post.slug}`}
+⋮...
+
+
+# File: app\components\NavBar.tsx
+
+
+app\components\NavBar.tsx:
+⋮...
+│export default function NavBar() {
+│  return (
+│    <nav className="bg-white border-b border-gray-200">
+│      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+│        <div className="flex justify-between h-16 items-center">
+│          <div className="flex-shrink-0">
+│            <Link href="/" className="text-black text-xl font-semibold">
+│              John Peng
+│            </Link>
+│          </div>
+⋮...
+
+
+# File: app\resume\page.tsx
+
+
+app\resume\page.tsx:
+⋮...
+│export default function Resume() {
+│  return (
+│    <div className={`min-h-screen bg-white text-black p-8 ${inter.className}`}>
+│      <div className="max-w-3xl mx-auto">
+│        <header className="mb-12">
+│          <h1 className="text-4xl font-bold mb-2">John Peng</h1>
+│          <p className="text-gray-400">johnpeng47@gmail.com | (647) 206-3110 | Toronto, Canada</p>
+│        </header>
+│
+│        <section className="mb-8">
+⋮...
+
+
+# File: app\layout.tsx
+
+
+app\layout.tsx
+
+
+# File: app\page.tsx
+
+
+app\page.tsx
+
+
+# File: lib\posts.ts
+
+
+lib\posts.ts:
+│export interface BlogPost {
+⋮...
+│export function getBlogPost(slug: string): BlogPost | undefined {
+│  return blogPosts.find(post => post.slug === slug);
+⋮...
+
+
+# File: lib\utils.ts
+
+
+lib\utils.ts:
+⋮...
+│export function cn(...inputs: ClassValue[]) {
+│  return twMerge(clsx(inputs))
+⋮...
+
+
+# File: next-env.d.ts
+
+
+next-env.d.ts
+
+
+# File: tailwind.config.ts
+
+
+tailwind.config.ts
+
+

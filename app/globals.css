@@ -90,3 +90,27 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+
+/* COMPONENT CSS */
+.code-block {
+}
+
+.code-block__content {
+}
+
+.content-section {
+}
+
+.content-paragraph {
+}
+
+.unordered-list {
+}
+
+.ordered-list {
+}
+
+.list-item {
+}
+/* END COMPONENT CSS */
