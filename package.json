@@ -4,9 +4,9 @@
   "private": true,
   "homepage": "/resume",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3002",
     "build": "next build",
-    "start": "next build && npx serve@latest out",
+    "start": "npx serve@latest out -l tcp://0.0.0.0:3002",
     "lint": "next lint"
   },
   "dependencies": {

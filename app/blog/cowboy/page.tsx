@@ -24,25 +24,28 @@ export default function Cowboy() {
 
       <Section>
         <Paragraph>
-          I don&apos;t like writing tests. 
-          Nobody likes writing tests? With LLMs, I thought there was a way to automate a large part of testing out of software development. 
-          So today I am releasing <a href="https://github.com/JohnPeng47/cowboy">Cowboy</a>, an open-source project that aims at doing just that, mankind&apos;s first step towards full unit test automation.
+          I don&apos;t like writing tests.
         </Paragraph>
+        <Paragraph>
+          Nobody likes writing tests? With LLMs, I thought there was a way to automate a large part of testing out of software development. 
+          So today I am open-sourcing <a href="https://github.com/JohnPeng47/cowboy"><u>Cowboy</u></a>, mankind&apos;s first step towards full unit test automation.
+        </Paragraph>
+        <Paragraph>
+          <em>
+            Currently it is limited to only extending existing test suites because this is easier and gives us a reliable baseline
+            performance for further performance in future designs (more on this here).
+          </em>
+        </Paragraph>
+      </Section>
+      <Section>
+        <h2 className="text-2xl font-bold mt-8 mb-4">How it works</h2>
         <Paragraph>The main loop in Cowboy goes something like this:</Paragraph>
         <OrderedList>
-          <ListItem>Iterate through all existing TestModules (a collection of tests, this is either a whole file or a class with unit tests implemented as its methods) in your current repo</ListItem>
+          <ListItem>Iterate through all existing test suites in your current repo</ListItem>
           <ListItem>Pass its context into a LLM test-generating prompt</ListItem>
           <ListItem>Generate a set of tests</ListItem>
           <ListItem>Run coverage on the set of tests to ensure that they improve coverage</ListItem>
         </OrderedList>
-        <Paragraph>
-          Currently we are limited to only extending existing TestModules because:
-        </Paragraph>
-        <UnorderedList>
-          <ListItem>Getting the setup code for tests to work can be quite tricky</ListItem>
-          <ListItem>Without example code, the LLM is liable to generate code that is ostensibly correct but completely out of wack with the style/standards used in the rest of the tests</ListItem>
-        </UnorderedList>
-
         <Paragraph>
           The current prompt that Cowboy uses is quite simple, and only uses two pieces context:
         </Paragraph>
@@ -57,54 +60,71 @@ Come up with some new tests that improves coverage`}
         </CodeBlock>
 
         <Paragraph>
-          Of the two pieces of contexts above, getting the existing_tests is easy but getting the source_file that is uniquely covered by a particular test case actually proved to be quite tricky
+          Of the two pieces of contexts above, getting the "existing_tests" is pretty straight-forward. However,
+          figuring out what to include for the "source_file" context proved to be a little bit tricky
         </Paragraph>
       </Section>
       <Section>
         <h2 className="text-2xl font-bold mt-8 mb-4">Setup Coverage Collection</h2>
         <Paragraph>
-          Most (all?) test runners (ie. Pytest, Grunt, Junit, etc.) will only give you line coverage for all the lines that are covered when running the test. Unless the source file under test is abnormally isolated, chances are they will have dependencies on other source files, which will get pulled into the test coverage. And placing all of the source files into the prompt context is:
+          The initial idea was to use coverage information to figure this out, since coverage data tells us the line of source code executed by individual tests.
+        </Paragraph>
+        <Paragraph>
+          However, problem soon presents itself. Most (all?) test runners (ie. Pytest, Grunt, Junit, etc.) will only give you line coverage for
+          *all* the lines that are covered when running the test. This includes alot of extra lines that sets up the program state for test execution, but have
+          nothing to do with the file that the test is meant to cover. We could include all of them in our prompt, and pray that
+          the LLM can sift through hundreds of useless lines to find <em>The One File</em> ... or we can try to solve this problem with code. 
         </Paragraph>
 
-        <OrderedList>
-          <ListItem>More likely to exceed the context length</ListItem>
-          <ListItem>Confuse the LLM on which source file is meant to be covered under by the test</ListItem>
-        </OrderedList>
-
         <Paragraph>
-          The first way I went about to solve this is by subtracting (set difference) the base coverage (coverage of whole repo) by the base coverage subtracted by module coverage (coverage of a single TestModule) deselected:
+          The first way I went about to solve this is by taking the difference between the set of all lines covered by a test suite (mod_cov)
+          and the total set with all the tests (base_cov). Here is a simple example to illustrate this.
         </Paragraph>
 
         <CodeBlock>
           {`base_cov -> [1,2,3,4,5] -------: f1.py
-mod_cov -> [3,4,5] ------------: f1.py
-base_cov - mod_cov -> [1,2] ---: f1.py
-base_cov - (base_cov - mod_cov) = mod_cov   # aha mod_cov covers line [1,2] of f1.py`}
+mod_cov -> [3,4,5] ------------: f1.py # (this is unknown)
+base_cov - mod_cov -> [1,2] ---: f1.py # (this is known, by deselecting its tests)
+base_cov - (base_cov - mod_cov) = mod_cov   # aha mod_cov covers line [3,4,5] of f1.py`}
         </CodeBlock>
 
         <Paragraph>
-          (Note: the value of mod_cov cannot be recovered directly, since we can only deselect tests, so we only know base_cov and (base_cov - mod_cov) beforehand).
+          Note: We have to first calculate <em>base_cov - mod_cov</em> by deselecting all the tests from the test suite (I did this in Pytest, but assume other test runners 
+          implement a very similar API). 
+          Then, when we take its difference from base_cov, what remains are the set of lines that are only covered by mod_cov.
         </Paragraph>
 
         <Paragraph>
-          The example above is actually an ideal case because in alot of cases, the set of source lines covered by mod_cov will likely be covered another test that a part of base_cov. So this won&apos;t work, at least not well enough for us to generalize. The next solution I found, and which is currently the one that I am implementing in Cowboy, is to take the same coverage diffing principal from before, but this time, in a way that has less overlap between [cov1,cov2] in cov1 - (cov1 - cov2).
+          The example above is actually an ideal case because alot of times, the set of source lines 
+          covered by mod_cov will likely have overlap with another test in base_cov, which means that 
+          deselecting the test in base_cov - mod_cov will not work; the test will still run because of its inclusion in base_cov.
+          For example, if t1 and t2 both cover lines [1,2,3] in f1, only deselecting t1 means that these lines are still executed on account of t2.
         </Paragraph>
-
+        <Paragraph>
+          To get coverage diffing to work, I had to find a way to remove all the irrelevant source lines while using a base
+          that has minimum overlaps. The final solution that I ended up with still took the general form:
+        </Paragraph>
+        <CodeBlock>
+          {`cov1 - (cov1 - cov2)`}
+        </CodeBlock>
+        <Paragraph>
+          But:
+        </Paragraph>
         <UnorderedList>
-          <ListItem>instead of using base_cov for cov1, I use mod_cov</ListItem>
-          <ListItem>instead of using mod_cov for cov1 - cov2, I use mod_cov - test_i_cov, the TestModule coverage with test i deselected</ListItem>
+          <ListItem>Instead of using base_cov for cov1, I use mod_cov, that is the test suite coverage</ListItem>
+          <ListItem>Instead of using mod_cov for cov2 in (cov1 - cov2), I replaced cov2 with the coverage of the <em>test suite with a single test deselected</em></ListItem>
+          <ListItem>I then do this for all the tests in the test suite</ListItem>
         </UnorderedList>
 
-        <Paragraph>then I do:</Paragraph>
-
+        <Paragraph>The new algorithm looks something like this:</Paragraph>
         <CodeBlock>
-          {`total_cov;
-for i in len(tests):
-  total_cov += mod_cov - (mod_cov - test_{i}_cov)`}
+          {`mod_cov - sum([mod_cov - test for test in mod.tests])`}
         </CodeBlock>
 
         <Paragraph>
-          So now, instead of the potential coverage overlap being between all the tests inside TestModule and all the test in the whole repo, we now only have to consider overlap between a single test in TestModule and all the other tests in TestModule.
+          Now, instead of the potential coverage overlap being between all the test suite and the entire repo, we now only 
+          have to consider the overlap between a tests in a single test suite. This allows us to pinpoint which lines of source files are uniquely
+          covered by tests, allowing us to construct the "source_file" context while minimizing the number of unrelated files.
         </Paragraph>
       </Section>
 
